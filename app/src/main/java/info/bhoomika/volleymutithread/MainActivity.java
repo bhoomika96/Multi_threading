@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                         //System.out.println(Thread.currentThread().getName());
 
                         tv21.setText(callstamp());
+                        makeJsonArrayRequest2();
                     }
                 };
                 pool.execute(task);
@@ -155,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                         //System.out.println(Thread.currentThread().getName());
 
                         tv31.setText(callstamp());
+                        makeJsonArrayRequest3();
                     }
                 };
                 pool.execute(task);
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                         //System.out.println(Thread.currentThread().getName());
 
                         tv41.setText(callstamp());
+                        makeJsonArrayRequest4();
                     }
                 };
                 pool.execute(task);
@@ -316,5 +319,255 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
+    private void makeJsonArrayRequest2() {
+
+        JsonArrayRequest req = new JsonArrayRequest(url[1],
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+
+                        try {
+                            // Parsing json array response
+                            // loop through each json object
+                            jsonResponse = "";
+                            for (int i = 0; i < response.length(); i++) {
+
+                                JSONObject person = (JSONObject) response
+                                        .get(i);
+
+                                String albumid = person.getString("albumId");
+                                String id = person.getString("id");
+                                String title = person.getString("title");
+                                String url = person.getString("url");
+                                String thumbnail = person.getString("thumnailUrl");
+
+                                registerphotos(albumid, id, title, url, thumbnail);
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+    }
+    private void registerphotos(String a,String b,String c,String d,String e)
+    {
+        final String albumid=a;
+        final String id=b;
+        final String title=c;
+        final String url=d;
+        final String thumbnail=e;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL1,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put(KEY_ALBUMID,albumid);
+                params.put(KEY_IDP,id);
+                params.put(KEY_TITLE,title);
+                params.put(KEY_URL,url);
+                params.put(KEY_THUMBNAIL,thumbnail);
+
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void makeJsonArrayRequest3() {
+
+        JsonArrayRequest req = new JsonArrayRequest(url[2],
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+
+                        try {
+                            // Parsing json array response
+                            // loop through each json object
+                            jsonResponse = "";
+                            for (int i = 0; i < response.length(); i++) {
+
+                                JSONObject comment = (JSONObject) response
+                                        .get(i);
+
+                                String useridT = comment.getString("userId");
+                                String id = comment.getString("id");
+                                String title = comment.getString("title");
+                                String completed = comment.getString("completed");
+
+                                registertodos(useridT, id, title, completed);
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+    }
+    private void registertodos(String a,String b,String c,String d)
+    {
+        final String userid=a;
+        final String id=b;
+        final String title=c;
+        final String comppleted=d;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL1,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put(KEY_USERID,userid);
+                params.put(KEY_IDT,id);
+                params.put(KEY_TITLET,title);
+                params.put(KEY_COM,comppleted);
+
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void makeJsonArrayRequest4() {
+
+        JsonArrayRequest req = new JsonArrayRequest(url[3],
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+
+                        try {
+                            // Parsing json array response
+                            // loop through each json object
+                            jsonResponse = "";
+                            for (int i = 0; i < response.length(); i++) {
+
+                                JSONObject comment = (JSONObject) response
+                                        .get(i);
+
+                                String useridp = comment.getString("userId");
+                                String id = comment.getString("id");
+                                String title = comment.getString("title");
+                                String body = comment.getString("body");
+
+                                registerposts(useridp, id, title, body);
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
+    }
+    private void registerposts(String a, final String b,String c,String d)
+    {
+        final String userid=a;
+        final String id=b;
+        final String title=c;
+        final String body=d;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTER_URL1,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put(KEY_USER,userid);
+                params.put(KEY_IDPOST,id);
+                params.put(KEY_TITLEP,title);
+                params.put(KEY_BODYP,body);
+
+                return params;
+            }
+
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
 }
+
 
